@@ -1,0 +1,22 @@
+---
+  import Hero from './Home.astro';
+  import Destination from '../components/Destination.astro';
+  import Crew from '../components/Crew.astro';
+  import Technology from '../components/Technology.astro';
+---
+
+<section class="space-tourism">
+
+  <Hero />
+  <Destination />
+  <Crew />
+  <Technology />
+
+</section>
+
+<style>
+  .space-tourism {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

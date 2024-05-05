@@ -1,0 +1,250 @@
+<section class="section crew" id="crew">
+
+  
+  <div class="columns container">
+    
+    <div class="sd-nav-list-wrapper">
+      <h1 class="sd-nav-list">Pick your destination</h1>
+    </div>
+
+    <div class="crew-information">
+  
+      <div class="crew-data">
+        <p class="crew-profession"></p>
+        <h1 class="crew-name"></h1>
+        <p class="crew-desc"></p>
+      </div>
+
+      <div class="crew-controls-wrapper">
+        <div id="Engineer" class="crew-control crew-active"></div>
+        <div id="Commander" class="crew-control"></div>
+        <div id="Pilot" class="crew-control"></div>
+        <div id="Specialist" class="crew-control"></div>
+      </div>
+    </div>
+
+    <div class="crew-avatar">
+      <img class="crew-img" src="/crew/image-anousheh-ansari.webp" alt="Avatar de crew">
+      <hr class="mobile-only avatar-sep">
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  .crew {
+    display: flex;
+    align-items: end;
+
+    position: relative;
+    min-height: 100dvh;
+    background-image: url("/crew/background-crew-desktop.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .columns {
+    position: relative;
+    min-height: 32em;
+    display: grid;
+    place-content: end;
+    grid-template-columns: 1fr 31em;
+  }
+  
+  .sd-nav-list {
+    counter-increment: section +2;
+  }
+
+  .crew-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+
+  .crew-profession {
+    color: var(--txt-secondary);
+    font-size: var(--fs-650);
+    text-transform: uppercase;
+    font-family: var(--ff-serif);
+    letter-spacing: 1px;
+    margin-bottom: .5em;
+  }
+
+  .crew-name {
+    font-size: 3.3em;
+    letter-spacing: 2px;
+    font-weight: var(--fw-regular);
+    font-family: var(--ff-serif);
+    text-transform: uppercase;
+    margin-bottom: .8em;
+  }
+
+  .crew-desc {
+    max-width: 45.1ch;
+    color: var(--txt-secondary);
+    margin-bottom: 6em;
+  }
+
+  .crew-controls-wrapper {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 3em;
+  }
+
+  .crew-control {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    background-color: var(--darker-blue-gray);
+    transition: background-color .1s ease;
+  }
+
+  .crew-control:hover {
+    background-color: var(--neutral-100);
+  }
+
+  .crew-control.crew-active {
+    background-color: var(--neutral-100);
+  }
+
+  .crew-avatar {
+    display: flex;
+    justify-content: center;
+  }
+
+  .crew-img {
+    max-height: 500px;
+    width: auto;
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+
+  @media (width <= 1020px) {
+    .crew {
+      background-image: url("/crew/background-crew-tablet.jpg");
+    }
+
+    .columns {
+      padding-top: 14em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .crew-information {
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .crew-profession {
+      font-size: var(--fs-500);
+    }
+
+    .crew-name {
+      font-size: 2.5em;
+    }
+
+    .crew-desc {
+      max-width: 51ch;
+      min-height: 8.5em;
+      margin-bottom: 1.5em;
+    }
+
+    .crew-img {
+      max-height: 400px;
+    }
+  }
+
+  @media(width <= 780px) {
+    .crew {
+      background-image: url("/crew/background-crew-mobile.jpg");
+    }
+
+    .columns {
+      flex-direction: column-reverse;
+    }
+    
+    .crew-profession {
+      font-size: var(--fs-450);
+    }
+
+    .crew-name {
+      font-size: 1.6em;
+    }
+
+    .crew-desc {
+       font-size: var(--fs-400);
+    }
+
+    .crew-img {
+      max-height: 320px;
+    }
+
+    .crew-avatar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .crew-img {
+      width: fit-content;
+      align-self: center;
+    }
+
+    .avatar-sep {
+      border: 0;
+      border-top: 1px solid rgb(85, 87, 100);
+      margin-bottom: 1.5em;
+    }
+  }
+
+</style>
+
+<script>
+  import { destinations, crew, technology } from "../../spaceData.json"
+
+  const navLinks = document.querySelectorAll(".crew-control")
+
+  const name = document.querySelector(".crew-name") as HTMLElement
+  const profession = document.querySelector(".crew-profession") as HTMLElement
+  const description = document.querySelector(".crew-desc") as HTMLElement
+  const image = document.querySelector(".crew-img") as HTMLImageElement
+
+  const crewData = document.querySelector(".crew-data") as HTMLElement
+
+  const crewElements = [image, crewData]
+
+  function activeData() {
+    var crewActive = document.querySelector(".crew-active").id
+    name.textContent = crew[crewActive].name
+    profession.textContent = crew[crewActive].profession
+    description.textContent = crew[crewActive].description
+    image.src = crew[crewActive].image
+  }
+
+  function slideCrew() {
+    crewElements.forEach(element => {
+      element.style.animation = "fadeOut .4s forwards"
+      element.addEventListener("animationend", () => {
+        activeData()
+        element.style.animation = "fadeIn .4s"
+      })
+    })
+  }
+
+  navLinks.forEach(navLink => {
+    navLink.addEventListener("click", (e) => {
+      navLinks.forEach(f => f.classList.remove('crew-active'));
+      (e.target as HTMLElement).classList.toggle("crew-active");
+
+      slideCrew()
+    })
+  })
+
+  activeData()
+</script>

@@ -1,0 +1,245 @@
+<section class="section technology" id="technology">
+
+  <div class="columns container">
+
+    <div class="sd-nav-list-wrapper">
+      <h1 class="sd-nav-list">Pick your destination</h1>
+    </div>
+
+    <div class="launch">
+      <div class="launch-columns">
+
+        <nav class="vehicle-nav">
+          <ul class="vehicle-nav-list">
+            <li id="Vehicle" class="vehicle-active"></li>
+            <li id="Capsule"></li>
+            <li id="Spaceport"></li>
+          </ul>
+        </nav>
+
+        <div class="vehicle-info">
+          <p class="intro">The terminology...</p>
+          <h1 class="vehicle-title"></h1>
+          <p class="vehicle-desc"></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="vehicle-img-wrapper">
+      <img class="vehicle-img" src="/technology/image-launch-vehicle-portrait.jpg" alt="Imagen de vehículo">
+      <img class="vehicle-landscape-img" src="/technology/image-launch-vehicle-landscape.jpg" alt="Imagen de vehículo">
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  .technology {
+    display: flex;
+    align-items: end;
+
+    position: relative;
+    min-height: 100dvh;
+    min-width: 100%;
+    background-image: url("/technology/background-technology-desktop.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .columns {
+    position: relative;
+    min-height: 32em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-content: end;
+  }
+
+  .sd-nav-list {
+    counter-increment: section +3;
+  }
+
+  .launch {
+    display: flex;
+  }
+
+  .launch-columns {
+    display: flex;
+    align-items: center;
+    gap: 4em;
+    height: 100%;
+  }
+
+  .vehicle-nav-list {
+    list-style: none;
+    counter-reset: vehicle-nav;
+  }
+
+  .vehicle-nav-list li {
+    cursor: pointer;
+    padding: 2em;
+    border: 1px solid var(--darker-blue-gray);
+    border-radius: 100%;
+    counter-increment: vehicle-nav;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5em;
+    transition: background-color .1s ease;
+  }
+
+  .vehicle-nav-list li.vehicle-active,
+  .vehicle-nav-list li:not(.vehicle-active):hover {
+    background-color: var(--neutral-100);
+    color: var(--neutral-900);
+  }
+
+  .vehicle-nav-list li::after {
+    font-size: var(--fs-600);
+    font-family: var(--ff-serif);
+    content: counter(vehicle-nav);
+    position: absolute;
+    display: block;
+  }
+
+  .vehicle-info .intro {
+    margin-bottom: .5em;
+    color: var(--txt-secondary);
+    letter-spacing: 1.5px;
+    font-family: var(--ff-serif);
+    text-transform: uppercase;
+  }
+
+  .vehicle-title {
+    font-size: 3em;
+    text-transform: uppercase;
+    font-weight: var(--fw-regular);
+    letter-spacing: 2px;
+    margin-bottom: .6em;
+  }
+
+  .vehicle-desc {
+    color: var(--txt-secondary);
+    max-width: 44.5ch;
+  }
+
+  .vehicle-img-wrapper {
+    display: flex;
+    justify-content: end;
+  }
+
+  .vehicle-img-wrapper img {
+    max-width: 460px;
+  }
+
+  .vehicle-landscape-img {
+    display: none;
+  }
+
+  @media(width <= 1020px) {
+    .technology {
+      background-image: url("/technology/background-technology-tablet.jpg");
+    }
+
+    .columns {
+      padding-top: 14em;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      text-align: center;
+      gap: 3em;
+    }
+
+    .launch-columns {
+      flex-direction: column;
+    }
+
+    .vehicle-nav-list {
+      display: flex;
+      gap: 1.3em;
+    }
+
+    .vehicle-img {
+      display: none;
+    }
+
+    .vehicle-img-wrapper img {
+      max-width: 690px;
+    }
+
+    .vehicle-landscape-img {
+      display: block;
+    }
+
+    .launch {
+      justify-content: center;
+      height: 25em;
+    }
+
+    .launch-columns {
+      gap: 1.3em;
+    }
+
+    .vehicle-info .intro {
+      font-size: var(--fs-350);
+    }
+
+    .vehicle-title {
+      font-size: 2.5em;
+    }
+
+  }
+
+  @media(width <= 780px) {
+    .technology {
+      background-image: url("/technology/background-technology-mobile.jpg");
+    }
+  }
+</style>
+
+<script>
+import { technology } from "../../spaceData.json"
+
+  const navLinks = document.querySelectorAll(".vehicle-nav-list li")
+
+  const info = document.querySelector(".vehicle-info") as HTMLElement
+  const image = document.querySelector(".vehicle-img") as HTMLImageElement
+  const imageLandscape = document.querySelector(".vehicle-landscape-img") as HTMLImageElement
+
+  const title = document.querySelector(".vehicle-title") as HTMLElement
+  const description = document.querySelector(".vehicle-desc") as HTMLElement
+
+  const vehicleElements = [info, image, imageLandscape]
+
+  function activeData() {
+    const activeVehicle = document.querySelector(".vehicle-active").id
+
+    title.textContent = technology[activeVehicle].title
+    description.textContent = technology[activeVehicle].description
+    image.src = technology[activeVehicle].images.portrait
+    imageLandscape.src = technology[activeVehicle].images.landscape
+  }
+
+  function slideTech() {
+    vehicleElements.forEach(vehicle => {
+      vehicle.style.animation = "fadeOut .4s forwards"
+      vehicle.addEventListener("animationend", () => {
+        activeData()
+        vehicle.style.animation = "fadeIn .4s forwards"
+      })
+    })
+  }
+
+  navLinks.forEach(navLink => {
+    navLink.addEventListener("click", (e) => {
+      navLinks.forEach(f => f.classList.remove('vehicle-active'));
+      (e.target as HTMLElement).classList.toggle("vehicle-active");
+      slideTech()
+    })
+  })
+
+  activeData()
+</script>

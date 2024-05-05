@@ -1,0 +1,288 @@
+<section class="section destination" id="destination">
+  
+  <div class="columns container">
+    
+    <div class="sd-nav-list-wrapper">
+      <h1 class="sd-nav-list">Pick your destination</h1>
+    </div>
+
+    <div class="pick-destination">
+      <div class="img-wrapper">
+        <img class="dest-img" src="/destination/image-moon.webp" alt="Imagen del destino">
+      </div>
+
+    </div>
+
+    <div class="dest-selector">
+      <nav class="dest-nav">
+        <ul class="dest-list">
+          <li id="moon" class="dest-active">Moon</li>
+          <li id="mars">Mars</li>
+          <li id="europa">Europa</li>
+          <li id="titan">Titan</li>
+        </ul>
+      </nav>
+
+      <div class="dest-main">
+        <h1 class="dest-title"></h1>
+        <p class="dest-desc"></p>
+      </div>
+
+      <hr class="dest-sep">
+
+      <div class="dest-info info-columns">
+        <div class="distance">
+          <p>Avg. distance</p>
+          <span class="dest-distance"></span>
+        </div>
+        <div class="travel-time">
+          <p>Est. travel time</p>
+          <span class="dest-time"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  .destination {
+    display: flex;
+    align-items: end;
+
+    position: relative;
+    min-height: 100dvh;
+    min-width: 100%;
+    background-image: url("/destination/background-destination-desktop.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+  }
+
+  .columns {
+    position: relative;
+    min-height: 32em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8em;
+    padding-bottom: 2em;
+    place-content: end;
+  }
+
+  .sd-nav-list {
+    counter-increment: section;
+  }
+
+  .img-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  .img-wrapper img {
+    max-width: 400px;
+  }
+
+  .dest-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    max-width: 55ch;
+  }
+
+  .dest-main {
+    margin-bottom: auto;
+  }
+
+  .dest-list {
+    list-style: none;
+    display: flex;
+    gap: 1.8em;
+  }
+
+  .dest-list li {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    text-transform: uppercase;
+    color: var(--txt-secondary);
+    padding-bottom: 10px;
+    transition: color .2s ease;
+  }
+
+  .dest-list li.dest-active {
+    color: var(--nutral-100)
+  }
+
+  .dest-list li.dest-active::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background-color: var(--neutral-100);
+    bottom: 0;
+  }
+
+  .dest-list li:not(.dest-active)::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 0;
+    background-color: var(--neutral-100);
+    bottom: 0;
+    transition: width 0.2s ease;
+  }
+
+  .dest-list li:hover::after {
+    width: 100%;
+  }
+
+  .dest-selector h1 {
+    font-size: 4.8em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: var(--fw-regular);
+  }
+
+  .dest-selector p {
+    color: var(--txt-secondary)
+  }
+
+  .info-columns {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dest-desc {
+    max-width: 44ch;
+  }
+
+  hr {
+    margin-top: 1em;
+    border: 0;
+    border-top: 1px solid var(--neutral-600)
+  }
+
+  .info-columns p {
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: var(--fs-300);
+  }
+
+  .info-columns span {
+    font-family: var(--ff-serif);
+    text-transform: uppercase;
+    font-size: var(--fs-650);
+  }
+
+  @media(width <= 1020px) {
+    .destination {
+      background-image: url("/destination/background-destination-tablet.jpg")
+    }
+
+    .columns {
+      padding-top: 14em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 3em;
+    }
+
+    .dest-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info-columns {
+      gap: 1.5em;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .img-wrapper img {
+      max-width: 300px;
+    }
+  }
+
+  @media(width <= 780px) {
+    .destination {
+      background-image: url("/destination/background-destination-mobile.jpg")
+    }
+  }
+</style>
+
+<script>
+  import { destinations, crew, technology } from "../../spaceData.json"
+
+  const navLinks = document.querySelectorAll(".dest-list li")
+
+  const moon = document.querySelector("#moon")
+  const mars = document.querySelector("#mars")
+  const europa = document.querySelector("#europa")
+  const titan = document.querySelector("#titan")
+
+  const destSep = document.querySelector(".dest-sep") as HTMLElement
+
+  const image = document.querySelector(".dest-img") as HTMLImageElement
+  const main = document.querySelector(".dest-main") as HTMLElement
+  const info = document.querySelector(".dest-info") as HTMLElement
+
+  const title = document.querySelector(".dest-title")
+  const description = document.querySelector(".dest-desc")
+  const distance = document.querySelector(".dest-distance")
+  const time = document.querySelector(".dest-time")
+
+  const destElements = [image, main, info, destSep]
+  const destinies = [moon, mars, europa, titan]
+
+  
+  function activeData() {
+    let activeDestination = document.querySelector(".dest-active").textContent
+    
+    title.textContent = destinations[activeDestination].title
+    description.textContent = destinations[activeDestination].description
+    distance.textContent = destinations[activeDestination].distance
+    time.textContent = destinations[activeDestination].time
+    image.src = destinations[activeDestination].image
+  }
+
+  function slideDest() {
+    destElements.forEach(element => {
+      element.style.animation = "fadeOut .4s forwards"
+
+      destElements.forEach(element => {
+        element.addEventListener("animationend", () => {
+          activeData()
+          element.style.animation = "fadeIn .4s forwards"
+        })
+      })
+    })
+  }
+
+  destinies.forEach(destiny => {
+    destiny.addEventListener("click", () => {
+      if (!destiny.classList.contains("dest-active")) {
+        slideDest()
+      }
+    })
+  })
+  
+  navLinks.forEach(navLink => {
+    navLink.addEventListener("click", (e) => {
+      navLinks.forEach(f => f.classList.remove('dest-active'));
+      (e.target as HTMLElement).classList.toggle("dest-active");
+    })
+  })
+
+  activeData()
+</script>

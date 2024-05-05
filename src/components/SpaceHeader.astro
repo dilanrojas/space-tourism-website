@@ -1,0 +1,259 @@
+<header>
+  <div class="nav-wrapper container" style="--custom-width: 1440px; --custom-padding: 4rem;">
+    <div class="logo-wrapper">
+      <img class="logo" src="/shared/logo.svg" alt="Logo">
+    </div>
+    <div class="nav-line"></div>
+    <nav class="pm-nav">
+      <ul class="pm-nav-list">
+        <li class="home active" onclick="location.href='#home'">Home</li>
+        <li class="destination" id="goDest" onclick="location.href='#destination'">Destination</li>
+        <li class="crew" onclick="location.href='#crew'">Crew</li>
+        <li class="technology" onclick="location.href='#technology'">Technology</li>
+      </ul>
+    </nav>
+    <div class="hamburguer">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    padding-top: 35px;
+    width: 100%;
+    z-index: 90;
+  }
+  
+  .nav-wrapper {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+  }
+
+  .hamburguer {
+    cursor: pointer;
+    display: none;
+    flex-direction: column;
+    width: 30px;
+    gap: .44em;
+    z-index: 50;
+  }
+
+  .hamburguer .bar {
+    height: 3px;
+    background-color: var(--light-blue-gray);
+    transition: transform .4s ease;
+    box-shadow: 1px 1px 20px rgb(0, 0, 0);
+  }
+
+  .hamburguer.active .bar:nth-child(2) {
+    transform: scale(0);
+  }
+
+  .hamburguer.active .bar:first-child {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .hamburguer.active .bar:last-child {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    width: 44px;
+    margin-right: auto;
+  }
+
+  .nav-line {
+    display: block;
+    max-width: 29.5625rem;
+    flex: 1;
+    height: 2px;
+    background-color: var(--dark-blue-gray);
+    z-index: 30;
+    transform: translateX(40px);
+  }
+
+  .pm-nav {
+    position: relative;
+    padding-left: 120px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pm-nav::before {
+    content: '';
+    left: 0;
+    position: absolute;
+    width: 100vmax;
+    height: 100%;
+    background-color: rgba(112, 111, 125, 0.092);
+    backdrop-filter: blur(30px);
+  }
+  
+  .pm-nav-list {
+    display: flex;
+    align-items: center;
+    counter-reset: nav-list -1;
+    list-style: none;
+    gap: 2.5em;
+    height: 100%;
+  }
+
+  .pm-nav-list li {
+    cursor: pointer;
+    text-transform: uppercase;
+    color: var(--txt-primary);
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-family: var(--ff-sans-serif);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+  }
+
+  .pm-nav-list li::after {
+    content: '';
+    height: 3px;
+    width: 0;
+    background-color: var(--neutral-100);
+    position: absolute;
+    bottom: 0;
+    transition: width 0.2s ease;
+  }
+
+  .pm-nav-list li.active::after {
+    content: '';
+    height: 3px;
+    width: 95%;
+    background-color: var(--neutral-100);
+    position: absolute;
+    bottom: 0;
+    transition: width 0.2s ease;
+  }
+
+
+  .pm-nav-list li::before {
+    font-weight: var(--fw-bold);
+    counter-increment: nav-list;
+    content: "0" counter(nav-list);
+    padding-right: .5em;
+  }
+
+  @media(width <= 1020px) {
+    .nav-line {
+      display: none;
+    }
+    header {
+      padding-top: 0px;
+    }
+
+    .nav-wrapper {
+      --custom-padding: 2rem!important;
+    }
+
+    .pm-nav {
+      margin-left: auto;
+      padding-inline: 40px;
+      justify-content: start;
+    }
+
+    .pm-nav-list li {
+      font-weight: 400;
+    }
+
+    .pm-nav-list li::before {
+      display: none!important;
+    }
+  }
+
+  @media(width <= 780px) {
+    .pm-nav::before {
+      display: none;
+    }
+
+    .pm-nav-list {
+      padding-left: 30px;
+      padding-top: 100px;
+      position: fixed;
+      right: -999px;
+      top: 0;
+      flex-direction: column;
+      height: 100%;
+      width: 350px;
+      align-items: start;
+      background-color: rgba(48, 48, 54, 0.475);
+      backdrop-filter: blur(30px);
+      transition: right .4s ease;
+    }
+
+    .pm-nav-list.active {
+      right: 0;
+    }
+
+    .pm-nav-list li {
+      height: auto;
+      padding-bottom: 5px;
+    }
+
+    .hamburguer {
+      display: flex;
+    }
+
+  }
+</style>
+
+<script>  
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>(".pm-nav-list li")
+  const sections = document.querySelectorAll<HTMLElement>(".section")
+
+  const navList = document.querySelector(".pm-nav-list")
+  const navMenu = document.querySelector(".hamburguer")
+
+  function navMenuToggle() {
+    navMenu.classList.toggle("active")
+    navList.classList.toggle("active")
+  }
+
+  let currentSection = 'home'
+  window.addEventListener("scroll", () => {
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 70) {
+        currentSection = section.id
+      }
+    })
+
+    navLinks.forEach(navLink => {
+      if (navLink.classList.contains(currentSection)) {
+        navLink.classList.add("active")
+      } else {
+        navLink.classList.remove("active")
+      }
+    })
+  })
+
+  navLinks.forEach(navLink => {
+    navLink.addEventListener("click", () => {
+      if (navMenu.classList.contains("active")) {
+        navMenuToggle()
+      }
+    })
+  }
+  )
+
+  navMenu.addEventListener("click", () => {
+    navMenuToggle()
+  })
+</script>
